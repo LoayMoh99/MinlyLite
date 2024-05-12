@@ -1,17 +1,16 @@
 import sharp, { Sharp } from 'sharp'
-import mime from 'mime'
 import { join } from 'path'
 import fs from 'fs/promises'
 
-import { IMedia } from '@/contracts/media'
+import { ImageInterface } from '@/contracts/image'
 import { joinRelativeToMainPath } from '@/utils/paths'
 
 export class Image {
-  private image: Express.Multer.File | IMedia
+  private image: Express.Multer.File | ImageInterface
 
   private sharpInstance: Sharp
 
-  constructor(image: Express.Multer.File | IMedia) {
+  constructor(image: Express.Multer.File | ImageInterface) {
     this.image = image
   }
 

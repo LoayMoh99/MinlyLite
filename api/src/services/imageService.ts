@@ -1,27 +1,27 @@
 import { ClientSession, ObjectId } from 'mongoose'
 
-import { Media } from '@/models'
-import { CreateMediaPayload, UpdateMediaPayload } from '@/contracts/media'
-import { MediaRefType } from '@/constants'
+import { Image } from '@/models'
+import { CreateImagePayload, UpdateImagePayload } from '@/contracts/image'
+import { ImageRefType } from '@/constants'
 
-export const mediaService = {
-  getById: (mediaId: ObjectId) => Media.findById(mediaId),
+export const imageService = {
+  getById: (imageId: ObjectId) => Image.findById(imageId),
 
   findOneByRef: ({
     refType,
     refId
   }: {
-    refType: MediaRefType
+    refType: ImageRefType
     refId: ObjectId
-  }) => Media.findOne({ refType, refId }),
+  }) => Image.findOne({ refType, refId }),
 
   findManyByRef: ({
     refType,
     refId
   }: {
-    refType: MediaRefType
+    refType: ImageRefType
     refId: ObjectId
-  }) => Media.find({ refType, refId }),
+  }) => Image.find({ refType, refId }),
 
   create: (
     {
@@ -32,10 +32,10 @@ export const mediaService = {
       filename,
       path,
       size
-    }: CreateMediaPayload,
+    }: CreateImagePayload,
     session?: ClientSession
   ) =>
-    new Media({
+    new Image({
       originalname,
       encoding,
       mimetype,
@@ -46,11 +46,11 @@ export const mediaService = {
     }).save({ session }),
 
   updateById: (
-    mediaId: ObjectId,
-    { refType, refId }: UpdateMediaPayload,
+    imageId: ObjectId,
+    { refType, refId }: UpdateImagePayload,
     session?: ClientSession
   ) => {
-    const data = [{ _id: mediaId }, { refType, refId }]
+    const data = [{ _id: imageId }, { refType, refId }]
 
     let params = null
 
@@ -60,20 +60,20 @@ export const mediaService = {
       params = data
     }
 
-    return Media.updateOne(...params)
+    return Image.updateOne(...params)
   },
 
-  deleteById: (mediaId: ObjectId, session?: ClientSession) =>
-    Media.deleteOne({ _id: mediaId }, { session }),
+  deleteById: (imageId: ObjectId, session?: ClientSession) =>
+    Image.deleteOne({ _id: imageId }, { session }),
 
   deleteManyByRef: (
     {
       refType,
       refId
     }: {
-      refType: MediaRefType
+      refType: ImageRefType
       refId: ObjectId
     },
     session?: ClientSession
-  ) => Media.deleteMany({ refType, refId }, { session })
+  ) => Image.deleteMany({ refType, refId }, { session })
 }

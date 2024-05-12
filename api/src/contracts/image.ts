@@ -1,6 +1,6 @@
 import { Model, ObjectId } from 'mongoose'
 
-export interface IMedia {
+export interface ImageInterface {
   originalname: string
   encoding: string
   mimetype: string
@@ -13,11 +13,11 @@ export interface IMedia {
   refId?: ObjectId
 }
 
-export type CreateMediaPayload = Omit<
-  IMedia,
+export type CreateImagePayload = Omit<
+  ImageInterface,
   'refId' | 'refType' | 'orderColumn'
 >
 
-export type UpdateMediaPayload = Pick<IMedia, 'refId' | 'refType'>
+export type UpdateImagePayload = Pick<ImageInterface, 'refId' | 'refType'>
 
-export type MediaModel = Model<IMedia>
+export type ImageModel = Model<ImageInterface>

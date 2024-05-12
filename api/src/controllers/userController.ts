@@ -17,12 +17,12 @@ import {
   VerificationRequestPayload
 } from '@/contracts/user'
 import {
-  mediaService,
+  imageService,
   resetPasswordService,
   userService,
   verificationService
 } from '@/services'
-import { ExpiresInDays, MediaRefType } from '@/constants'
+import { ExpiresInDays, ImageRefType } from '@/constants'
 import { createDateAddDaysFromNow } from '@/utils/dates'
 import { createCryptoString } from '@/utils/cryptoString'
 import { UserMail } from '@/mailer'
@@ -43,18 +43,18 @@ export const userController = {
       })
     }
 
-    const media = await mediaService.findOneByRef({
-      refType: MediaRefType.User,
+    const image_doc = await imageService.findOneByRef({
+      refType: ImageRefType.User,
       refId: user.id
     })
 
-    let image
-    if (media) {
-      image = appUrl(await new Image(media).sharp({ width: 150, height: 150 }))
+    let image_url
+    if (image_doc) {
+      image_url = appUrl(await new Image(image_doc).sharp({ width: 150, height: 150 }))
     }
 
     return res.status(StatusCodes.OK).json({
-      data: { ...user.toJSON(), image },
+      data: { ...user.toJSON(), image: image_url },
       message: ReasonPhrases.OK,
       status: StatusCodes.OK
     })
@@ -395,8 +395,8 @@ export const userController = {
     try {
       await userController.deleteUserImages({ userId: user.id })
 
-      await mediaService.updateById(imageId, {
-        refType: MediaRefType.User,
+      await imageService.updateById(imageId, {
+        refType: ImageRefType.User,
         refId: user.id
       })
 
@@ -470,8 +470,8 @@ export const userController = {
   },
 
   deleteUserImages: async ({ userId }: { userId: ObjectId }) => {
-    const images = await mediaService.findManyByRef({
-      refType: MediaRefType.User,
+    const images = await imageService.findManyByRef({
+      refType: ImageRefType.User,
       refId: userId
     })
 
@@ -483,8 +483,8 @@ export const userController = {
 
     await Promise.all(promises)
 
-    await mediaService.deleteManyByRef({
-      refType: MediaRefType.User,
+    await imageService.deleteManyByRef({
+      refType: ImageRefType.User,
       refId: userId
     })
   }
