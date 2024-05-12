@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --requirepass rdpassword123
+    volumes: 
+      - ./api/data:/data
+    networks:
+      - my-network
+  api:
+    build: ./api
+    restart: on-failure
+    ports:
+      - '8000:8000'
+    depends_on:
+      - redis
+    networks:
+      - my-network
+    volumes:
+      - ./api/data:/usr/src/app/data
+      - ./api/logs:/usr/src/app/logs
+      - ./api/src/storage/public:/usr/src/app/src/storage/public
+  web:
+    build: ./web
+    ports:
+      - '3000:3000'
+    networks:
+      - my-network
+    volumes: # mainly for development (hot reload)
+      - ./web:/app
+    depends_on:
+      - api
+networks:
+  my-network:
+    driver: bridge

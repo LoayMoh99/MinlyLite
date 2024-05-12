@@ -32,6 +32,18 @@ import { Image } from '@/infrastructure/image'
 import { appUrl } from '@/utils/paths'
 
 export const userController = {
+  // make the req empty
+  test: async (
+    _: IContextRequest<IUserRequest>,
+    res: Response
+  ) => {
+
+    return res.status(StatusCodes.OK).json({
+      data: { message: 'Hello World' },
+      message: ReasonPhrases.OK,
+      status: StatusCodes.OK
+    })
+  },
   me: async (
     { context: { user } }: IContextRequest<IUserRequest>,
     res: Response

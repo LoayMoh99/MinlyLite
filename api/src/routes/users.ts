@@ -5,6 +5,9 @@ import { userController } from '@/controllers'
 import { userValidation } from '@/validations'
 
 export const users = (router: Router): void => {
+
+  router.get('/test', userController.test)
+
   router.get('/me', authGuard.isAuth, userController.me)
 
   router.post(
