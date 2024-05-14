@@ -4,7 +4,7 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 
 import { uploadSingleImage } from '@/infrastructure/upload'
 
-export const uploadSingleImageMiddleware = (
+export const uploadSingleImageValidation = (
   req: Request,
   res: Response,
   next: NextFunction

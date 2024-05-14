@@ -2,7 +2,7 @@ import { ClientSession, ObjectId } from 'mongoose'
 
 import { Image } from '@/models'
 import { CreateImagePayload, UpdateImagePayload } from '@/contracts/image'
-import { ImageRefType } from '@/constants'
+import { MediaRefType } from '@/constants'
 
 export const imageService = {
   getById: (imageId: ObjectId) => Image.findById(imageId),
@@ -11,7 +11,7 @@ export const imageService = {
     refType,
     refId
   }: {
-    refType: ImageRefType
+    refType: MediaRefType
     refId: ObjectId
   }) => Image.findOne({ refType, refId }),
 
@@ -19,7 +19,7 @@ export const imageService = {
     refType,
     refId
   }: {
-    refType: ImageRefType
+    refType: MediaRefType
     refId: ObjectId
   }) => Image.find({ refType, refId }),
 
@@ -71,7 +71,7 @@ export const imageService = {
       refType,
       refId
     }: {
-      refType: ImageRefType
+      refType: MediaRefType
       refId: ObjectId
     },
     session?: ClientSession

@@ -1,6 +1,6 @@
 import { Model, ObjectId } from 'mongoose'
 
-export interface ImageInterface {
+export interface IImage {
   originalname: string
   encoding: string
   mimetype: string
@@ -14,10 +14,10 @@ export interface ImageInterface {
 }
 
 export type CreateImagePayload = Omit<
-  ImageInterface,
+  IImage,
   'refId' | 'refType' | 'orderColumn'
 >
 
-export type UpdateImagePayload = Pick<ImageInterface, 'refId' | 'refType'>
+export type UpdateImagePayload = Pick<IImage, 'refId' | 'refType'>
 
-export type ImageModel = Model<ImageInterface>
+export type ImageModel = Model<IImage>

@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
 
-import { ImageInterface, ImageModel } from '@/contracts/image'
+import { IImage, ImageModel } from '@/contracts/image'
 
-const schema = new Schema<ImageInterface, ImageModel>(
+const schema = new Schema<IImage, ImageModel>(
   {
     originalname: String,
     encoding: String,
@@ -21,4 +21,4 @@ const schema = new Schema<ImageInterface, ImageModel>(
   { timestamps: true }
 )
 
-export const Image = model<ImageInterface, ImageModel>('Image', schema)
+export const Image = model<IImage, ImageModel>('Image', schema)

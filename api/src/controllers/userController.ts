@@ -22,7 +22,7 @@ import {
   userService,
   verificationService
 } from '@/services'
-import { ExpiresInDays, ImageRefType } from '@/constants'
+import { ExpiresInDays, MediaRefType } from '@/constants'
 import { createDateAddDaysFromNow } from '@/utils/dates'
 import { createCryptoString } from '@/utils/cryptoString'
 import { UserMail } from '@/mailer'
@@ -32,9 +32,9 @@ import { Image } from '@/infrastructure/image'
 import { appUrl } from '@/utils/paths'
 
 export const userController = {
-  // make the req empty
+
   test: async (
-    _: IContextRequest<IUserRequest>,
+    _: IParamsRequest<{}>,
     res: Response
   ) => {
 
@@ -44,6 +44,7 @@ export const userController = {
       status: StatusCodes.OK
     })
   },
+
   me: async (
     { context: { user } }: IContextRequest<IUserRequest>,
     res: Response
@@ -55,18 +56,20 @@ export const userController = {
       })
     }
 
-    const image_doc = await imageService.findOneByRef({
-      refType: ImageRefType.User,
+    const image = await imageService.findOneByRef({
+      refType: MediaRefType.User,
       refId: user.id
     })
 
-    let image_url
-    if (image_doc) {
-      image_url = appUrl(await new Image(image_doc).sharp({ width: 150, height: 150 }))
+    console.log('image', image)
+
+    let imageUrl
+    if (image) {
+      imageUrl = appUrl(await new Image(image).sharp({ width: 150, height: 150 }))
     }
 
     return res.status(StatusCodes.OK).json({
-      data: { ...user.toJSON(), image: image_url },
+      data: { ...user.toJSON(), image: imageUrl },
       message: ReasonPhrases.OK,
       status: StatusCodes.OK
     })
@@ -408,7 +411,7 @@ export const userController = {
       await userController.deleteUserImages({ userId: user.id })
 
       await imageService.updateById(imageId, {
-        refType: ImageRefType.User,
+        refType: MediaRefType.User,
         refId: user.id
       })
 
@@ -483,7 +486,7 @@ export const userController = {
 
   deleteUserImages: async ({ userId }: { userId: ObjectId }) => {
     const images = await imageService.findManyByRef({
-      refType: ImageRefType.User,
+      refType: MediaRefType.User,
       refId: userId
     })
 
@@ -496,7 +499,7 @@ export const userController = {
     await Promise.all(promises)
 
     await imageService.deleteManyByRef({
-      refType: ImageRefType.User,
+      refType: MediaRefType.User,
       refId: userId
     })
   }

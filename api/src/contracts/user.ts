@@ -22,6 +22,8 @@ export interface IUser {
   verified: boolean
   verifications?: ObjectId[]
   resetPasswords?: ObjectId[]
+  likedMedia?: ObjectId[]
+  dislikedMedia?: ObjectId[]
 }
 
 export interface IUserMethods {

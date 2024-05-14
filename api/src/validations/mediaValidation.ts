@@ -1,49 +1,39 @@
 import { NextFunction, Response } from 'express'
-import { ObjectId } from 'mongoose'
-import validator from 'validator'
 import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import winston from 'winston'
 
-import { IBodyRequest } from '@/contracts/request'
-import {
-  DeleteProfilePayload,
-  UpdateEmailPayload,
-  UpdatePasswordPayload,
-  UpdateProfilePayload,
-  VerificationRequestPayload
-} from '@/contracts/user'
+import { IBodyRequest, IQueryRequest } from '@/contracts/request'
+import { CreateMediaPayload, ListingMediaPayload } from '@/contracts/media'
 
 export const mediaValidation = {
-  verificationRequest: (
-    req: IBodyRequest<VerificationRequestPayload>,
+  mediaListing: (
+    req: IQueryRequest<ListingMediaPayload>,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      if (!req.body.email) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
+      // if no params are provided, set default values
+      if (!req.query.pageNo) {
+        req.query.pageNo = 1
       }
-
-      let normalizedEmail =
-        req.body.email && validator.normalizeEmail(req.body.email)
-      if (normalizedEmail) {
-        normalizedEmail = validator.trim(normalizedEmail)
+      if (!req.query.pageSize) {
+        req.query.pageSize = 10
       }
-
-      if (
-        !normalizedEmail ||
-        !validator.isEmail(normalizedEmail, { allow_utf8_local_part: false })
-      ) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
+      if (!req.query.sortBy) {
+        req.query.sortBy = 'new'
       }
-
-      Object.assign(req.body, { email: normalizedEmail })
+      // check if sortBy not of type MediaSorting 'new' | 'popular' | 'trending' | 'random'
+      switch (req.query.sortBy) {
+        case 'new':
+        case 'popular':
+        case 'trending':
+        case 'random':
+          break;
+        default:
+          //set default value if not of type MediaSorting
+          req.query.sortBy = 'new'
+          break;
+      }
 
       return next()
     } catch (error) {
@@ -56,101 +46,13 @@ export const mediaValidation = {
     }
   },
 
-  updateProfile: (
-    req: IBodyRequest<UpdateProfilePayload>,
+  mediaCreate: (
+    req: IBodyRequest<CreateMediaPayload>,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      if (!req.body.firstName || !req.body.lastName) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
-      }
-
-      const trimemdFirstName = validator.trim(req.body.firstName)
-      const trimemdLastName = validator.trim(req.body.lastName)
-
-      if (
-        !validator.isLength(trimemdFirstName, { min: 2, max: 48 }) ||
-        !validator.isLength(trimemdLastName, { min: 2, max: 48 })
-      ) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
-      }
-
-      Object.assign(req.body, {
-        firstName: trimemdFirstName,
-        lastName: trimemdLastName
-      })
-
-      return next()
-    } catch (error) {
-      winston.error(error)
-
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: ReasonPhrases.BAD_REQUEST,
-        status: StatusCodes.BAD_REQUEST
-      })
-    }
-  },
-
-  updateEmail: (
-    req: IBodyRequest<UpdateEmailPayload>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      if (!req.body.email || !req.body.password) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
-      }
-
-      let normalizedEmail =
-        req.body.email && validator.normalizeEmail(req.body.email)
-      if (normalizedEmail) {
-        normalizedEmail = validator.trim(normalizedEmail)
-      }
-
-      if (
-        !normalizedEmail ||
-        !validator.isEmail(normalizedEmail, { allow_utf8_local_part: false })
-      ) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
-      }
-
-      Object.assign(req.body, { email: normalizedEmail })
-
-      return next()
-    } catch (error) {
-      winston.error(error)
-
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: ReasonPhrases.BAD_REQUEST,
-        status: StatusCodes.BAD_REQUEST
-      })
-    }
-  },
-
-  updatePassword: (
-    { body: { oldPassword, newPassword } }: IBodyRequest<UpdatePasswordPayload>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      if (
-        !oldPassword ||
-        !newPassword ||
-        !validator.isLength(newPassword, { min: 6, max: 48 })
-      ) {
+      if (!req.body.title || !req.body.mediaUrl || !req.body.type) {
         return res.status(StatusCodes.BAD_REQUEST).json({
           message: ReasonPhrases.BAD_REQUEST,
           status: StatusCodes.BAD_REQUEST
@@ -168,51 +70,4 @@ export const mediaValidation = {
     }
   },
 
-  updateAvatar: (
-    { body: { imageId } }: IBodyRequest<{ imageId: ObjectId }>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      if (!imageId) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
-      }
-
-      return next()
-    } catch (error) {
-      winston.error(error)
-
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: ReasonPhrases.BAD_REQUEST,
-        status: StatusCodes.BAD_REQUEST
-      })
-    }
-  },
-
-  deleteProfile: (
-    { body: { password } }: IBodyRequest<DeleteProfilePayload>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      if (!password) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-          status: StatusCodes.BAD_REQUEST
-        })
-      }
-
-      return next()
-    } catch (error) {
-      winston.error(error)
-
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: ReasonPhrases.BAD_REQUEST,
-        status: StatusCodes.BAD_REQUEST
-      })
-    }
-  }
 }

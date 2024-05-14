@@ -14,7 +14,9 @@ const schema = new Schema<IUser, UserModel, IUserMethods>(
       default: false
     },
     verifications: [{ type: Schema.Types.ObjectId, ref: 'Verification' }],
-    resetPasswords: [{ type: Schema.Types.ObjectId, ref: 'ResetPassword' }]
+    resetPasswords: [{ type: Schema.Types.ObjectId, ref: 'ResetPassword' }],
+    likedMedia: [{ type: Schema.Types.ObjectId, ref: 'Media' }],
+    dislikedMedia: [{ type: Schema.Types.ObjectId, ref: 'Media' }]
   },
   { timestamps: true }
 )

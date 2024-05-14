@@ -179,7 +179,7 @@ If you're looking for an easy-to-use tool to test your email SMTP functionality,
 │  │  ├── corsMiddleware.ts
 │  │  ├── index.ts
 │  │  ├── notFoundMiddleware.ts
-│  │  └── uploadSingleImageMiddleware.ts
+│  │  └── uploadSingleImageValidation.ts
 │  ├── models
 │  │  ├── index.ts
 │  │  ├── resetPassword.ts

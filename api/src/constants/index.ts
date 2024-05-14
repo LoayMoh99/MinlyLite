@@ -12,6 +12,6 @@ export enum ImageSizeInMb {
   Ten = 10
 }
 
-export enum ImageRefType {
+export enum MediaRefType {
   User = 'User'
 }
