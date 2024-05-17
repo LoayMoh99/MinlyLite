@@ -30,8 +30,8 @@ services:
       - '3000:3000'
     networks:
       - my-network
-    volumes:
-      - ./web/build:/app/build
+    # volumes:
+    #   - ./web/build:/app/build
     depends_on:
       - api
 networks:
