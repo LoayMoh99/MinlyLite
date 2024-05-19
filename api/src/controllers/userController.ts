@@ -28,8 +28,6 @@ import { createCryptoString } from '@/utils/cryptoString'
 import { UserMail } from '@/mailer'
 import { jwtSign } from '@/utils/jwt'
 import { createHash } from '@/utils/hash'
-import { Image } from '@/infrastructure/image'
-import { appUrl } from '@/utils/paths'
 
 export const userController = {
 
@@ -55,20 +53,8 @@ export const userController = {
       })
     }
 
-    const image = await imageService.findOneByRef({
-      refType: MediaRefType.User,
-      refId: user.id
-    })
-
-    console.log('image', image)
-
-    let imageUrl
-    if (image) {
-      imageUrl = appUrl(await new Image(image).sharp({ width: 150, height: 150 }))
-    }
-
     return res.status(StatusCodes.OK).json({
-      data: { ...user.toJSON(), image: imageUrl },
+      data: { ...user.toJSON() },
       message: ReasonPhrases.OK,
       status: StatusCodes.OK
     })
@@ -484,19 +470,6 @@ export const userController = {
   },
 
   deleteUserImages: async ({ userId }: { userId: ObjectId }) => {
-    const images = await imageService.findManyByRef({
-      refType: MediaRefType.User,
-      refId: userId
-    })
-
-    const promises = []
-
-    for (let i = 0; i < images.length; i++) {
-      promises.push(new Image(images[i]).deleteFile())
-    }
-
-    await Promise.all(promises)
-
     await imageService.deleteManyByRef({
       refType: MediaRefType.User,
       refId: userId

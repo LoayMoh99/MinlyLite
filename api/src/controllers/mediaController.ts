@@ -3,9 +3,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import winston from 'winston'
 
 import { imageService, mediaService } from '@/services'
-import { Image } from '@/infrastructure/image'
 import { ICombinedRequest, IContextRequest, IParamsRequest, IQueryRequest, IUserRequest } from '@/contracts/request'
-import { appUrl } from '@/utils/paths'
 import { CreateMediaPayload, ListingMediaPayload, MediaTakeActionPayload } from '@/contracts/media'
 import { mediaUrls, videoUrls } from '@/seeds'
 
@@ -134,12 +132,8 @@ export const mediaController = {
     try {
       const image = await imageService.create(file as Express.Multer.File)
 
-      const imageUrl = appUrl(
-        await new Image(image).sharp({ width: 150, height: 150 })
-      )
-
       return res.status(StatusCodes.OK).json({
-        data: { id: image.id, image: imageUrl },
+        data: { id: image.id, image: 'imageUrl' },
         message: ReasonPhrases.OK,
         status: StatusCodes.OK
       })
@@ -147,7 +141,7 @@ export const mediaController = {
       console.log(error)
       winston.error(error)
 
-      await new Image(file as Express.Multer.File).deleteFile()
+      //await new Image(file as Express.Multer.File).deleteFile()
 
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: ReasonPhrases.BAD_REQUEST,

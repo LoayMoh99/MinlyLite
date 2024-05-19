@@ -8,21 +8,21 @@ services:
     command: redis-server --requirepass ${REDIS_PASSWORD}
     volumes: 
       - ./data:/data
-    networks:
-      - my-network
-  api:
-    build: .
-    restart: on-failure
-    ports:
-      - '8000:8000'
-    depends_on:
-      - redis
-    networks:
-      - my-network
-    volumes:
-      - ./data:/usr/src/app/data
-      - ./logs:/usr/src/app/logs
-      - ./src/storage/public:/usr/src/app/src/storage/public
-networks:
-  my-network:
-    driver: bridge
+#     networks:
+#       - my-network
+#   api:
+#     build: .
+#     restart: on-failure
+#     ports:
+#       - '8000:8000'
+#     depends_on:
+#       - redis
+#     networks:
+#       - my-network
+#     volumes:
+#       - ./data:/usr/src/app/data
+#       - ./logs:/usr/src/app/logs
+#       - ./src/storage/public:/usr/src/app/src/storage/public
+# networks:
+#   my-network:
+#     driver: bridge
