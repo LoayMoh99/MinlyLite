@@ -19,6 +19,12 @@ export type ListingMediaPayload = {
   pageNo?: number
   pageSize?: number
   sortBy?: MediaSorting
+  search?: string
+}
+
+export type MediaTakeActionPayload = {
+  mediaId: ObjectId
+  action: 'like' | 'dislike' | 'neutral'
 }
 
 export type CreateMediaPayload = Omit<IMedia, 'userId' | 'userName'>

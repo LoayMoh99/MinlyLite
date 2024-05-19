@@ -37,7 +37,6 @@ export const userController = {
     _: IParamsRequest<{}>,
     res: Response
   ) => {
-
     return res.status(StatusCodes.OK).json({
       data: { message: 'Hello World' },
       message: ReasonPhrases.OK,

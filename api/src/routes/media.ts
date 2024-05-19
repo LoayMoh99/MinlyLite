@@ -6,6 +6,11 @@ import { mediaValidation } from '@/validations'
 import { uploadSingleImageValidation } from '@/validations'
 
 export const media = (router: Router): void => {
+  // seeding media
+  router.get(
+    '/media/seeds',
+    mediaController.mediaSeeding
+  )
   // listing posts
   router.get(
     '/media/posts',
@@ -13,7 +18,7 @@ export const media = (router: Router): void => {
     mediaController.mediaListing
   )
 
-  // add/update a post
+  // add a new post
   router.post(
     '/media/post',
     authGuard.isAuth,
@@ -21,20 +26,14 @@ export const media = (router: Router): void => {
     mediaController.mediaCreate
   )
 
-  // get a single post
-  router.get(
-    '/media/post/:postId',
-    authGuard.isAuth,
-    mediaValidation.mediaCreate, // TODO: change it
-    mediaController.imageUpload // TODO: change it 
-  )
+  // REAST of CRUD - left TODO: delete, update, get post by id (but won't be implemented in Frontend)
 
   // like/unlike a post
   router.post(
     '/media/like-unlike',
     authGuard.isAuth,
-    mediaValidation.mediaCreate, // TODO: change it
-    mediaController.imageUpload // TODO: change it
+    mediaValidation.mediaTakeAction,
+    mediaController.mediaTakeAction
   )
 
   // upload image manually to our server and return the URL

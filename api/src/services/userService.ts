@@ -7,10 +7,12 @@ export const userService = {
     {
       email,
       password,
+      firstName = "",
       verified = false
     }: {
       email: string
       password: string
+      firstName?: string
       verified?: boolean
     },
     session?: ClientSession
@@ -18,6 +20,7 @@ export const userService = {
     new User({
       email,
       password,
+      firstName,
       verified
     }).save({ session }),
 

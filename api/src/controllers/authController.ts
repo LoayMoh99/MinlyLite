@@ -27,6 +27,7 @@ import { createDateAddDaysFromNow } from '@/utils/dates'
 import { UserMail } from '@/mailer'
 import { createHash } from '@/utils/hash'
 import { redis } from '@/dataSources'
+import { getUserName } from '@/utils/userName'
 
 export const authController = {
   signIn: async (
@@ -47,7 +48,10 @@ export const authController = {
       const { accessToken } = jwtSign(user.id)
 
       return res.status(StatusCodes.OK).json({
-        data: { accessToken },
+        data: {
+          accessToken: accessToken,
+          username: getUserName(user),
+        },
         message: ReasonPhrases.OK,
         status: StatusCodes.OK
       })
@@ -62,7 +66,7 @@ export const authController = {
   },
 
   signUp: async (
-    { body: { email, password } }: IBodyRequest<SignUpPayload>,
+    { body: { email, password, firstName } }: IBodyRequest<SignUpPayload>,
     res: Response
   ) => {
     const session = await startSession()
@@ -82,7 +86,8 @@ export const authController = {
       const user = await userService.create(
         {
           email,
-          password: hashedPassword
+          password: hashedPassword,
+          firstName: firstName ?? email.split('@')[0]
         },
         session
       )
@@ -127,7 +132,7 @@ export const authController = {
 
       return res.status(StatusCodes.OK).json({
         data: { accessToken },
-        message: ReasonPhrases.OK,
+        message: "Successful Registeration - Please check your email!",
         status: StatusCodes.OK
       })
     } catch (error) {

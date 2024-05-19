@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./app.css";
 
 import * as AuthService from "./services/auth.service";
 import IUser from './types/user.type';
@@ -13,6 +13,7 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 
 import EventBus from "./common/EventBus";
+import MediaUpload from "./components/MediaUpload/MediaUpload";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
@@ -72,6 +73,13 @@ const App: React.FC = () => {
             </li>
           </div>
         )}
+        <div className="navbar-nav ms-auto">
+          <li className="nav-item">
+            <Link to={"/upload"} className="nav-link">
+              Upload Media
+            </Link>
+          </li>
+        </div>
 
       </nav>
 
@@ -80,6 +88,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/upload" element={<MediaUpload />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>

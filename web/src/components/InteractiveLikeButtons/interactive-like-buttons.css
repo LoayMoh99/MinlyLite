@@ -1,0 +1,11 @@
+/* make the like clicked blue */
+.liked-btn {
+    background-color: #2739e0;
+    color: #fbe5d3;
+}
+
+/* make the disliked clicked red*/
+.disliked-btn {
+    background-color: #e02727;
+    color: #fbe5d3;
+}

@@ -3,7 +3,7 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import winston from 'winston'
 
 import { IBodyRequest, IQueryRequest } from '@/contracts/request'
-import { CreateMediaPayload, ListingMediaPayload } from '@/contracts/media'
+import { CreateMediaPayload, ListingMediaPayload, MediaTakeActionPayload } from '@/contracts/media'
 
 export const mediaValidation = {
   mediaListing: (
@@ -13,10 +13,12 @@ export const mediaValidation = {
   ) => {
     try {
       // if no params are provided, set default values
-      if (!req.query.pageNo) {
+      if (!req.query.pageNo || req.query.pageNo < 1) {
         req.query.pageNo = 1
       }
-      if (!req.query.pageSize) {
+
+      // if no params are provided, set default values or limit the pageSize to 50
+      if (!req.query.pageSize || req.query.pageSize > 50) {
         req.query.pageSize = 10
       }
       if (!req.query.sortBy) {
@@ -54,7 +56,14 @@ export const mediaValidation = {
     try {
       if (!req.body.title || !req.body.mediaUrl || !req.body.type) {
         return res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
+          message: "Invalid request for creating media",
+          status: StatusCodes.BAD_REQUEST
+        })
+      }
+      // limit title to be less than 50 characters
+      if (req.body.title.length > 50) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          message: "Title should be less than 50 characters",
           status: StatusCodes.BAD_REQUEST
         })
       }
@@ -64,7 +73,32 @@ export const mediaValidation = {
       winston.error(error)
 
       return res.status(StatusCodes.BAD_REQUEST).json({
-        message: ReasonPhrases.BAD_REQUEST,
+        message: ReasonPhrases.BAD_REQUEST + ' ' + error,
+        status: StatusCodes.BAD_REQUEST
+      })
+    }
+  },
+
+  // for like and dislike actions
+  mediaTakeAction: (
+    req: IBodyRequest<MediaTakeActionPayload>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      if (!req.body.mediaId || !req.body.action || (req.body.action !== 'like' && req.body.action !== 'dislike' && req.body.action !== 'neutral')) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          message: "Invalid request for like/dislike action",
+          status: StatusCodes.BAD_REQUEST
+        })
+      }
+
+      return next()
+    } catch (error) {
+      winston.error(error)
+
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: ReasonPhrases.BAD_REQUEST + ' ' + error,
         status: StatusCodes.BAD_REQUEST
       })
     }

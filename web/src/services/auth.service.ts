@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/auth/";
+const API_URL = process.env.API_URL || "http://localhost:8000/";
 
 export const register = (username: string, email: string, password: string) => {
   return axios.post(API_URL + "sign-up", {
@@ -12,7 +12,7 @@ export const register = (username: string, email: string, password: string) => {
 
 export const login = (email: string, password: string) => {
   return axios
-    .post(API_URL + "sign-in", {
+    .post(API_URL + "auth/sign-in", {
       email: email,
       password: password,
     })
