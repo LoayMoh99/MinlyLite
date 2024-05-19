@@ -30,6 +30,7 @@ import { jwtSign } from '@/utils/jwt'
 import { createHash } from '@/utils/hash'
 import { Image } from '@/infrastructure/image'
 import { appUrl } from '@/utils/paths'
+import { getUserName } from '@/utils/userName'
 
 export const userController = {
 
@@ -197,8 +198,14 @@ export const userController = {
       await session.commitTransaction()
       session.endSession()
 
+      // get username using userid
+      const user = await userService.getById(verification.user)
+
       return res.status(StatusCodes.OK).json({
-        data: { accessToken },
+        data: {
+          accessToken: accessToken,
+          username: getUserName(user),
+        },
         message: ReasonPhrases.OK,
         status: StatusCodes.OK
       })

@@ -15,6 +15,7 @@ function MediaUpload() {
     const [filetype, setFileType] = useState<string>("");
 
     const onFileChange = (files: any) => {
+        setFile(null);
         let validFileIndex = -1;
         for (let index = 0; index < files.length; index++) {
             const file = files[index];
@@ -30,23 +31,28 @@ function MediaUpload() {
             }
 
         }
-        if (validFileIndex === -1) {
-            setMessage("No valid file - Please add image or video!");
-        } else {
+        if (validFileIndex !== -1) {
             setMessage("");
-            const currentFile = files[0]
+            const currentFile = files[validFileIndex];
             setFile(currentFile)
         }
 
     }
 
     const handleClick = (formValue: { title: string }) => {
+        // check if user is logged in
+        const token = localStorage.getItem('usertoken');
+        if (!token) {
+            toast.error('You need to login first!');
+            return;
+        }
+
         const { title } = formValue;
         setMessage("");
         setLoading(true);
 
         if (file === null) {
-            setMessage("No valid file selected to upload!");
+            setMessage("No valid file selected to upload (image or video)!");
             setLoading(false);
             return;
         }
@@ -60,25 +66,23 @@ function MediaUpload() {
             console.log("error :(")
             setMessage("Could not upload the media!")
             setLoading(false)
+            setFile(null)
             return;
         }, () => {
             console.log("success!!")
             getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
                 try {
-                    const response = await createMedia(downloadURL, title ?? "No title provided", filetype);
-                    if (response.status !== 200) {
-                        if (response.status === 401) toast.error('You need to login first!');
-                        setMessage("Could not upload the media!")
-                        setLoading(false)
-                    }
+                    await createMedia(downloadURL, title ?? "No title provided", filetype);
                 } catch (error) {
-                    setMessage("Could not upload the media!")
+                    setMessage("Could not upload the media! " + error)
                     setLoading(false)
+                    setFile(null)
                     return;
                 }
                 toast.success('"Media uploaded successfully!')
                 setMessage("")
                 setLoading(false)
+                setFile(null)
             })
         })
     }

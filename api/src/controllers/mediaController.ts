@@ -95,7 +95,7 @@ export const mediaController = {
       winston.error(error)
 
       return res.status(StatusCodes.BAD_REQUEST).json({
-        message: ReasonPhrases.BAD_REQUEST,
+        message: error,
         status: StatusCodes.BAD_REQUEST
       })
     }

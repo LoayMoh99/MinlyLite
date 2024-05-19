@@ -5,11 +5,8 @@ const Profile: React.FC = () => {
   const currentUser = getCurrentUser();
 
   return (
-    <div className="container">
-      <p>
-        <strong>Name:</strong> {currentUser.username}
-      </p>
-      Welcome {currentUser.username}
+    <div>
+      <h1>Welcome {currentUser.username}</h1>
     </div>
   );
 };

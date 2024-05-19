@@ -13,40 +13,65 @@ const MediaCard = (media: IMedia) => {
     const [likesCount, setLikeCount] = useState(media.likesCount ?? 0);
     const [dislikesCount, setDislikeCount] = useState(media.dislikesCount ?? 0);
 
-    const handleLikeDislike = (value: number) => {
+    const handleLikeDislike = async (value: number) => {
+        // check if user is logged in
+        const token = localStorage.getItem('usertoken');
+        if (!token) {
+            toast.error('You need to login first!');
+            return;
+        }
+
         if (value === 1) {
             if (like === 1) {
                 setLike(0);
                 setLikeCount(likesCount - 1);
-                //call api to with neutral case
-                return takeActionOnMedia(media._id, 'neutral').then((response: any) => {
-                    if (response.status === 401) toast.error('You need to login first!');
+                await takeActionOnMedia(media._id, 'neutral').then((response: any) => {
+                    console.log(response);
+                    if (response.status !== 200) {
+                        toast.error(response.data.message);
+                        setLike(1);
+                        setLikeCount(likesCount + 1);
+                    }
                 });
+                //call api to with neutral case
+                return;
             } else if (like === -1) {
                 setLike(1);
                 setDislikeCount(dislikesCount - 1);
             }
             setLike(1);
             setLikeCount(likesCount + 1);
-            return takeActionOnMedia(media._id, 'like').then((response: any) => {
-                if (response.status === 401) toast.error('You need to login first!');
+            await takeActionOnMedia(media._id, 'like').then((response: any) => {
+                console.log(response);
+                if (response.status !== 200) {
+                    toast.error(response.data.message);
+                }
             });
         } else {
             if (like === -1) {
                 setLike(0);
                 setDislikeCount(dislikesCount - 1);
                 //call api to with neutral case
-                return takeActionOnMedia(media._id, 'neutral').then((response: any) => {
-                    if (response.status === 401) toast.error('You need to login first!');
+                await takeActionOnMedia(media._id, 'neutral').then((response: any) => {
+                    console.log(response);
+                    if (response.status !== 200) {
+                        toast.error(response.data.message);
+                    }
+                    setLike(-1);
+                    setDislikeCount(dislikesCount + 1);
                 });
+                return;
             } else if (like === 1) {
                 setLike(-1);
                 setLikeCount(likesCount - 1);
             }
             setLike(-1);
             setDislikeCount(dislikesCount + 1);
-            return takeActionOnMedia(media._id, 'dislike').then((response: any) => {
-                if (response.status === 401) toast.error('You need to login first!');
+            await takeActionOnMedia(media._id, 'dislike').then((response: any) => {
+                console.log(response);
+                if (response.status !== 200) {
+                    toast.error(response.data.message);
+                }
             });
         }
     }

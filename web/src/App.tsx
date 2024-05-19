@@ -50,7 +50,7 @@ const App: React.FC = () => {
           <div className="navbar-nav ml-auto">
             <li className="nav-item">
               <Link to={"/profile"} className="nav-link">
-                {currentUser.accessToken ? currentUser.accessToken.substring(0, 20) : "Anonymos"} ...{" "}
+                {currentUser.username}
               </Link>
             </li>
             <li className="nav-item">
@@ -87,8 +87,8 @@ const App: React.FC = () => {
       <div className="container mt-3">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/upload" element={<MediaUpload />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>

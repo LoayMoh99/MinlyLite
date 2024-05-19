@@ -14,7 +14,7 @@ function Search({ onSearch }: any) {
             <img
                 src={SearchIcon}
                 alt="Search"
-                onChange={() => onSearch(search)}
+                onClick={() => onSearch(search)}
             />
         </div>
     )

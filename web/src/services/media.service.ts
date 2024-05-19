@@ -9,12 +9,19 @@ export const getPublicMedias = (params: string = "") => {
 
 export const createMedia = (url: string, title: string, type: string) => {
   if (url === "" || title === "" || type === "") throw new Error("Invalid create media parameters!");
+  try {
+    const res = axios.post(API_URL + "media", {
+      title: title,
+      mediaUrl: url,
+      type: type,
+    }, { headers: authHeader() });
 
-  return axios.post(API_URL + "media", {
-    title: title,
-    mediaUrl: url,
-    type: type,
-  }, { headers: authHeader() });
+    return res;
+
+  } catch (error) {
+    console.error("Error creating media: ", error);
+    throw error;
+  }
 }
 
 export const takeActionOnMedia = (mediaId: string, action: 'like' | 'dislike' | 'neutral') => {

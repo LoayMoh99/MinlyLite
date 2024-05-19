@@ -1,13 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useParams } from "react-router-dom";
 
-import { login } from "../services/auth.service";
+import { login, verifyUser } from "../services/auth.service";
+import toast from "react-hot-toast";
 
 type Props = {}
 
 const Login: React.FC<Props> = () => {
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search) // id=123
+    let verificationtoken = params.get('verificationtoken') // 123 
+    console.log('verificationtoken', verificationtoken)
+    if (verificationtoken) {
+      // verify it 
+      verifyCredentials(verificationtoken);
+    }
+  }, []);
+
+  const verifyCredentials = async (token: string) => {
+    setMessage("");
+    setLoading(true);
+    await verifyUser(token).then(
+      () => {
+        navigate("/");
+        window.location.reload();
+        toast.success('Email verified successufully!')
+        setLoading(false);
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
+        setLoading(false);
+      }
+    );
+  }
+
   let navigate: NavigateFunction = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +70,7 @@ const Login: React.FC<Props> = () => {
 
     login(email, password).then(
       () => {
-        navigate("/profile");
+        navigate("/");
         window.location.reload();
       },
       (error) => {
