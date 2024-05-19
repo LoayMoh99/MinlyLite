@@ -13,14 +13,14 @@ export const media = (router: Router): void => {
   )
   // listing posts
   router.get(
-    '/media/posts',
+    '/medias',
     mediaValidation.mediaListing,
     mediaController.mediaListing
   )
 
   // add a new post
   router.post(
-    '/media/post',
+    '/media',
     authGuard.isAuth,
     mediaValidation.mediaCreate,
     mediaController.mediaCreate
@@ -36,9 +36,9 @@ export const media = (router: Router): void => {
     mediaController.mediaTakeAction
   )
 
-  // upload image manually to our server and return the URL
+  // upload image manually to our server and return the URL 
   router.post(
-    '/media/image/upload',
+    '/media/image-upload',
     authGuard.isAuth,
     uploadSingleImageValidation,
     mediaController.imageUpload

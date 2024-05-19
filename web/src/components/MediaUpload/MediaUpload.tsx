@@ -5,24 +5,39 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import { storage } from '../../config/firebase';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { createMedia } from '../../services/media.service';
+import toast from 'react-hot-toast';
 
 function MediaUpload() {
-    const [file, setFile] = useState<any>(null)
+    const [file, setFile] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
+    const [filetype, setFileType] = useState<string>("");
 
     const onFileChange = (files: any) => {
-        const currentFile = files[0]
-        setFile(currentFile)
-        console.log(files);
-    }
+        let validFileIndex = -1;
+        for (let index = 0; index < files.length; index++) {
+            const file = files[index];
+            // check that the type of this file is image or video
+            if (file.type.startsWith('image/')) {
+                validFileIndex = index;
+                setFileType('image');
+                break;
+            } else if (file.type.startsWith('video/')) {
+                validFileIndex = index;
+                setFileType('video');
+                break;
+            }
 
-    const uploadToDatabase = async (url: string, title: string) => {
-        let docData = {
-            mostRecentUploadURL: url,
-            username: "jasondubon"
         }
-        console.log(docData)
+        if (validFileIndex === -1) {
+            setMessage("No valid file - Please add image or video!");
+        } else {
+            setMessage("");
+            const currentFile = files[0]
+            setFile(currentFile)
+        }
+
     }
 
     const handleClick = (formValue: { title: string }) => {
@@ -31,11 +46,11 @@ function MediaUpload() {
         setLoading(true);
 
         if (file === null) {
-            setMessage("No file selected to upload!");
+            setMessage("No valid file selected to upload!");
             setLoading(false);
             return;
         }
-        const fileRef = ref(storage, `videos/${file?.name + Date.now().toString()} `)
+        const fileRef = ref(storage, `medias/${file?.name + Date.now().toString()} `)
         const uploadTask = uploadBytesResumable(fileRef, file)
 
         uploadTask.on('state_changed', (snapshot) => {
@@ -45,12 +60,24 @@ function MediaUpload() {
             console.log("error :(")
             setMessage("Could not upload the media!")
             setLoading(false)
+            return;
         }, () => {
             console.log("success!!")
             getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
-                await uploadToDatabase(downloadURL, title ?? "No title provided")
-
-                setMessage("Media uploaded successfully!")
+                try {
+                    const response = await createMedia(downloadURL, title ?? "No title provided", filetype);
+                    if (response.status !== 200) {
+                        if (response.status === 401) toast.error('You need to login first!');
+                        setMessage("Could not upload the media!")
+                        setLoading(false)
+                    }
+                } catch (error) {
+                    setMessage("Could not upload the media!")
+                    setLoading(false)
+                    return;
+                }
+                toast.success('"Media uploaded successfully!')
+                setMessage("")
                 setLoading(false)
             })
         })

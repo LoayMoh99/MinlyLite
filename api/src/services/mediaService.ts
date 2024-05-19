@@ -58,7 +58,7 @@ export const mediaService = {
     //const medias = await Media.find().sort(sortingCriteria).skip((pageNo - 1) * pageSize).limit(pageSize);
     const currentSize = medias.length;
 
-    return { medias, size: currentSize }
+    return { data: medias, size: currentSize }
   },
 
   getById: (mediaId: ObjectId) => Media.findById(mediaId),

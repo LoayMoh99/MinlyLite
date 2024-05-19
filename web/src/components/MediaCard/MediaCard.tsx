@@ -1,8 +1,10 @@
+import './media-card.css';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
 import InteractiveLikeButtons from '../InteractiveLikeButtons/InteractiveLikeButtons';
-import './media-card.css';
 import IMedia from '../../types/media.type';
+import { takeActionOnMedia } from '../../services/media.service';
+import toast from 'react-hot-toast';
 
 
 const MediaCard = (media: IMedia) => {
@@ -17,25 +19,35 @@ const MediaCard = (media: IMedia) => {
                 setLike(0);
                 setLikeCount(likesCount - 1);
                 //call api to with neutral case
-                return;
+                return takeActionOnMedia(media._id, 'neutral').then((response: any) => {
+                    if (response.status === 401) toast.error('You need to login first!');
+                });
             } else if (like === -1) {
                 setLike(1);
                 setDislikeCount(dislikesCount - 1);
             }
             setLike(1);
             setLikeCount(likesCount + 1);
+            return takeActionOnMedia(media._id, 'like').then((response: any) => {
+                if (response.status === 401) toast.error('You need to login first!');
+            });
         } else {
             if (like === -1) {
                 setLike(0);
                 setDislikeCount(dislikesCount - 1);
                 //call api to with neutral case
-                return;
+                return takeActionOnMedia(media._id, 'neutral').then((response: any) => {
+                    if (response.status === 401) toast.error('You need to login first!');
+                });
             } else if (like === 1) {
                 setLike(-1);
                 setLikeCount(likesCount - 1);
             }
             setLike(-1);
             setDislikeCount(dislikesCount + 1);
+            return takeActionOnMedia(media._id, 'dislike').then((response: any) => {
+                if (response.status === 401) toast.error('You need to login first!');
+            });
         }
     }
 

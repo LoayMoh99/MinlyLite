@@ -59,7 +59,6 @@ export const mediaController = {
     }: ICombinedRequest<IUserRequest, ListingMediaPayload>,
     res: Response
   ) => {
-    console.log('params 2', query)
     try {
       const media = await mediaService.paginatedListing(query, user)
 

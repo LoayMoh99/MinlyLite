@@ -7,10 +7,9 @@ const Profile: React.FC = () => {
   return (
     <div className="container">
       <p>
-        <strong>Token:</strong> {currentUser.accessToken.substring(0, 20)} ...{" "}
-        {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+        <strong>Name:</strong> {currentUser.username}
       </p>
-      Welcome User
+      Welcome {currentUser.username}
     </div>
   );
 };

@@ -14,6 +14,7 @@ import Profile from "./components/Profile";
 
 import EventBus from "./common/EventBus";
 import MediaUpload from "./components/MediaUpload/MediaUpload";
+import { Toaster } from "react-hot-toast";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
@@ -82,7 +83,7 @@ const App: React.FC = () => {
         </div>
 
       </nav>
-
+      <Toaster />
       <div className="container mt-3">
         <Routes>
           <Route path="/" element={<Home />} />
