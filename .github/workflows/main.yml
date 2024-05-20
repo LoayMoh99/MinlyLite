@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-#    paths:
-#      - 'api/**'
-#      - 'web/**'
+    paths:
+      - "api/**"
+      - "web/**"
 #  pull_request:
 #    paths:
 #      - 'api/**'
@@ -26,13 +26,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-#      - name: Determine changed files
-#        id: changes
-#        run: |
-#          echo "api_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^api/' && echo true || echo false)" >> $GITHUB_ENV
-#          echo "web_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^web/' && echo true || echo false)" >> $GITHUB_ENV
+      #      - name: Determine changed files
+      #        id: changes
+      #        run: |
+      #          echo "api_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^api/' && echo true || echo false)" >> $GITHUB_ENV
+      #          echo "web_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^web/' && echo true || echo false)" >> $GITHUB_ENV
 
-          
       - name: Build API Docker image
         run: |
           echo "Building Api Docker image..."
