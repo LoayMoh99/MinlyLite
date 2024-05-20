@@ -1,0 +1,43 @@
+name: Build Docker Images
+
+on:
+  push:
+    paths:
+      - 'api/**'
+      - 'web/**'
+#  pull_request:
+#    paths:
+#      - 'api/**'
+#      - 'web/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Determine changed files
+        id: changes
+        run: |
+          echo "api_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^api/' && echo true || echo false)" >> $GITHUB_ENV
+          echo "web_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^web/' && echo true || echo false)" >> $GITHUB_ENV
+
+      - name: Build API Docker image
+        if: env.api_changed == 'true'
+        run: |
+          docker build -t minlylite/api:latest ./api
+          docker push minlylite/api:latest
+
+      - name: Build Web Docker image
+        if: env.web_changed == 'true'
+        run: |
+          docker build -t minlylite/web:latest ./web
+          docker push minlylite/web:latest
