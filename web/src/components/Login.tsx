@@ -62,7 +62,6 @@ const Login: React.FC<Props> = () => {
     email: Yup.string().required("This field is required!"),
     password: Yup.string().required("This field is required!"),
   });
-
   const handleLogin = (formValue: { email: string; password: string }) => {
     const { email, password } = formValue;
 
