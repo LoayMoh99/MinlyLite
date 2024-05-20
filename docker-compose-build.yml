@@ -10,7 +10,7 @@ services:
     networks:
       - my-network
   api:
-    image: loaymoh1170067/minlylite-api:latest
+    build: ./api
     restart: on-failure
     ports:
       - '8000:8000'
@@ -23,15 +23,15 @@ services:
       - ./api/logs:/usr/src/app/logs
       - ./api/src/storage/public:/usr/src/app/src/storage/public
   web:
-    image: loaymoh1170067/minlylite-web:latest
+    build: ./web
     restart: on-failure
     ports:
       - '3000:3000'
     networks:
       - my-network
-    # volumes:
-    #   - ./web/:/app
-    #   - /app/node_modules
+    volumes:
+      - ./web/:/app
+      - /app/node_modules
     depends_on:
       - api
 networks:

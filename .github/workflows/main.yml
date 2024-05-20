@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "api/**"
-      - "web/**"
+    # paths:
+    #   - "api/**"
+    #   - "web/**"
 #  pull_request:
 #    paths:
 #      - 'api/**'
@@ -35,11 +35,11 @@ jobs:
       - name: Build API Docker image
         run: |
           echo "Building Api Docker image..."
-          docker build -t minlylite/api:latest ./api
-          docker push minlylite/api:latest
+          docker build -t loaymoh1170067/minlylite-api:latest ./api
+          docker push loaymoh1170067/minlylite-api:latest
 
       - name: Build Web Docker image
         run: |
           echo "Building Web Docker image..."
-          docker build -t minlylite/web:latest ./web
-          docker push minlylite/web:latest
+          docker build -t loaymoh1170067/minlylite-web:latest ./web
+          docker push loaymoh1170067/minlylite-web:latest
