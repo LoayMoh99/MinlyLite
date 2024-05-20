@@ -34,13 +34,13 @@ jobs:
       - name: Build API Docker image
         run: |
           echo "Building Api Docker image..."
-        #  docker build -t loaymoh1170067/minlylite-api:latest ./api
-        #  docker push loaymoh1170067/minlylite-api:latest
+          docker build --no-cache  -t loaymoh1170067/minlylite-api:latest ./api
+          docker push loaymoh1170067/minlylite-api:latest
 
       - name: Build Web Docker image
         run: |
           echo "Building Web Docker image..."
           cd web/
           pwd
-          docker build -t loaymoh1170067/minlylite-web:latest -f Dockerfile.dev .
+          docker build --no-cache  -t loaymoh1170067/minlylite-web:latest -f Dockerfile.dev .
           docker push loaymoh1170067/minlylite-web:latest
