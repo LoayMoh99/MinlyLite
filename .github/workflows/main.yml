@@ -31,17 +31,16 @@ jobs:
       #        run: |
       #          echo "api_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^api/' && echo true || echo false)" >> $GITHUB_ENV
       #          echo "web_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^web/' && echo true || echo false)" >> $GITHUB_ENV
-
       - name: Build API Docker image
         run: |
           echo "Building Api Docker image..."
-          docker build -t loaymoh1170067/minlylite-api:latest ./api
-          docker push loaymoh1170067/minlylite-api:latest
+        #  docker build -t loaymoh1170067/minlylite-api:latest ./api
+        #  docker push loaymoh1170067/minlylite-api:latest
 
       - name: Build Web Docker image
         run: |
           echo "Building Web Docker image..."
           cd web/
           pwd
-          docker build -t loaymoh1170067/minlylite-web:latest .
+          docker build -t loaymoh1170067/minlylite-web:latest -f Dockerfile.dev .
           docker push loaymoh1170067/minlylite-web:latest
