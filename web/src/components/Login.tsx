@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
 
 import { login, verifyUser } from "../services/auth.service";
 import toast from "react-hot-toast";
