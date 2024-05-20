@@ -40,7 +40,5 @@ jobs:
       - name: Build Web Docker image
         run: |
           echo "Building Web Docker image..."
-          cd web/
-          pwd
-          docker build --no-cache  -t loaymoh1170067/minlylite-web:latest -f Dockerfile.dev .
+          docker build --no-cache  -t loaymoh1170067/minlylite-web:latest ./web
           docker push loaymoh1170067/minlylite-web:latest

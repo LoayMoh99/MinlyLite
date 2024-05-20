@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./app.css";
+
 
 import * as AuthService from "./services/auth.service";
 import IUser from './types/user.type';
