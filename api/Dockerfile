@@ -1,5 +1,5 @@
 # Dockerfile
-FROM node:latest
+FROM node:latest-alpine
 
 # Create app directory
 WORKDIR /usr/src/app

@@ -26,7 +26,7 @@ const Login: React.FC<Props> = () => {
     setLoading(true);
     await verifyUser(token).then(
       () => {
-        navigate("/");
+        navigate("/profile");
         window.location.reload();
         toast.success('Email verified successufully!')
         setLoading(false);
@@ -40,6 +40,7 @@ const Login: React.FC<Props> = () => {
           error.toString();
 
         setLoading(false);
+        setMessage(resMessage);
       }
     );
   }
@@ -67,10 +68,10 @@ const Login: React.FC<Props> = () => {
 
     setMessage("");
     setLoading(true);
-
+    
     login(email, password).then(
       () => {
-        navigate("/");
+        navigate("/profile");
         window.location.reload();
       },
       (error) => {
