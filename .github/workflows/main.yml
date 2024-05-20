@@ -27,9 +27,23 @@ jobs:
       - name: Determine changed files
         id: changes
         run: |
-          echo "api_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^api/' && echo true || echo false)" >> $GITHUB_ENV
-          echo "web_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^web/' && echo true || echo false)" >> $GITHUB_ENV
-
+          echo "GITHUB_SHA: ${{ github.sha }}"
+          echo "GITHUB_BASE_REF: ${{ github.event.pull_request.base.sha }}"
+          api_changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^api/')
+          web_changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^web/')
+          if [ -n "$api_changes" ]; then
+            echo "api_changed=true" >> $GITHUB_ENV
+          else
+            echo "api_changed=false" >> $GITHUB_ENV
+          fi
+          if [ -n "$web_changes" ]; then
+            echo "web_changed=true" >> $GITHUB_ENV
+          else
+            echo "web_changed=false" >> $GITHUB_ENV
+          fi
+          echo "API changes: $api_changes"
+          echo "Web changes: $web_changes"
+          
       - name: Build API Docker image
         if: env.api_changed == 'true'
         run: |
