@@ -18,9 +18,9 @@ This is a Fullstack project including web. mobile, and backend apps.
     -   Dockerhub (as our docker images registery)
     -   Docker-compose  for orchasteration
     -   ngnix as a web server (as a proxy)
-    -   CICD using Github actions
+    -   CICD using Github actions;
 
-
+**CI is working and every push on main it push new images in Dockerhub.**
 
 
 ## Project setup
