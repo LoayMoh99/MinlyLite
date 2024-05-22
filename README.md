@@ -1,5 +1,13 @@
 # MinlyLite Project
-This is a media-sharing platform consisting of a backend server with CRUD operations, mobile applications, and a web application. The platform allows users to upload images or videos, view a list of all images and videos, and like/dislike them.
+It is a media-sharing platform consisting of a backend server with CRUD operations, mobile applications, and a web application. The platform allows users to upload images or videos, view a list of all images and videos, and like/dislike them.
+
+![image](https://github.com/LoayMoh99/MinlyLite/assets/46066537/658b7f0a-ea9a-41e6-a62c-03924db4d138)
+![image](https://github.com/LoayMoh99/MinlyLite/assets/46066537/6ba27208-8249-498a-8511-a6123e819064)
+![image](https://github.com/LoayMoh99/MinlyLite/assets/46066537/41aad9a2-969a-40f4-b7f0-885831adb612)
+
+
+
+You can check a more detailed demo using this [link](https://drive.google.com/file/d/1zPMJqcUG-tMK5pGpvEyFzJfMmW3xDT-S/view) including login/signup/verification-redirect/validation on image upload and more..
 
 ## Tech Stack used
 - ### Frontend (Web)           
