@@ -1,4 +1,4 @@
-# mobile_cross
+# Minlylite Mobile Crossplatform
 
 A new Flutter project.
 
@@ -14,3 +14,15 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## To run project:
+
+- Must have flutter and dart installed.. (min Flutter Version is 2 if you have older version upgrade using `flutter upgrade` )
+- Get the packages from ./pubspec.yaml file using `flutter pub get`
+
+In mobile:
+- run `flutter run --no-sound-null-safety ` - now it's running on your emulator / attached device
+
+In web:
+- run `flutter run --no-sound-null-safety -d chrome --web-port=5555 --web-renderer=html` - now it's running on localhost:5555
+

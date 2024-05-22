@@ -1,86 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
-import 'package:photo_view/photo_view.dart';
+// ignore_for_file: import_of_legacy_library_into_null_safe
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:movies_webapp/const.dart';
+import 'package:movies_webapp/dependencyInjection.dart';
+import 'package:movies_webapp/providers/authentication.dart';
+import 'package:movies_webapp/providers/movies_provider.dart';
+import 'package:movies_webapp/routing/route_names.dart';
+import 'package:movies_webapp/routing/router.dart';
+import 'package:movies_webapp/services/navigation_service.dart';
+import 'package:movies_webapp/views/layout_template.dart';
+import 'package:provider/provider.dart';
+import 'dependencyInjection.dart';
+
+Future<void> main() async {
+  //for dependency injection (navigation service)
+  Injector injector = new Injector();
+  injector.setupLocator();
+  //for firebase initialization
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Image/Video Viewer',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MediaViewerScreen(),
-    );
-  }
-}
-
-class MediaViewerScreen extends StatefulWidget {
-  @override
-  _MediaViewerScreenState createState() => _MediaViewerScreenState();
-}
-
-class _MediaViewerScreenState extends State<MediaViewerScreen> {
-  VideoPlayerController? _videoPlayerController;
-  bool _isVideo = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController?.dispose();
-    super.dispose();
-  }
-
-  void _playVideo(String url) {
-    _videoPlayerController = VideoPlayerController.network(url)
-      ..initialize().then((_) {
-        setState(() {
-          _isVideo = true;
-          _videoPlayerController?.play();
-        });
-      });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Image/Video Viewer'),
-      ),
-      body: Center(
-        child: _isVideo
-            ? _videoPlayerController?.value.isInitialized ?? false
-                ? AspectRatio(
-                    aspectRatio: _videoPlayerController!.value.aspectRatio,
-                    child: VideoPlayer(_videoPlayerController!),
-                  )
-                : CircularProgressIndicator()
-            : PhotoView(
-                imageProvider: NetworkImage(
-                    'https://images.unsplash.com/source-404?fit=crop&fm=jpg&h=800&q=60&w=1200'), // Change to your image URL
-              ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            if (_isVideo) {
-              _videoPlayerController?.pause();
-              _isVideo = false;
-            } else {
-              _playVideo(
-                  'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'); // Change to your video URL
-            }
-          });
-        },
-        child: Icon(_isVideo ? Icons.image : Icons.videocam),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: AuthenticationProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: SeatsProvider(),
+        ),
+      ],
+      child: Consumer<AuthenticationProvider>(
+        builder: (ctx, auth, _) => GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Minlylite',
+          theme: theme,
+          builder: (context, child) => LayoutTemplate(
+            child: child!,
+          ),
+          navigatorKey: locator<NavigationService>().navigatorKey,
+          onGenerateRoute: generateRoute,
+          initialRoute: !isAuth ? LoginRoute : HomeRoute,
+        ),
       ),
     );
   }
