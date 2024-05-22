@@ -1,10 +1,7 @@
-import { createHmac } from 'crypto'
 
 export default function signHeader() {
-    const sign = createHmac('sha256', process.env.OUR_API_KEY ?? 'XXX').digest('base64')
+    // TODO it should be a base64 encoded string 
+    const sign = process.env.REACT_APP_API_KEY ?? 'XXX';
 
-    return {
-        Signature: sign ?? '',
-    };
-
+    return sign ?? '';
 }

@@ -10,7 +10,7 @@ export const signatureMiddleware = async (
   next: NextFunction
 ) => {
   try {
-    const { signature } = getSignatureFromHeaders(req.headers?.Signature)
+    const { signature } = getSignatureFromHeaders(req.headers?.signature)
     if (!signature || signature === '') return res.status(StatusCodes.NON_AUTHORITATIVE_INFORMATION).json({
       message: "Someone is trying to access this api without a signature!",
       status: StatusCodes.NON_AUTHORITATIVE_INFORMATION // 203

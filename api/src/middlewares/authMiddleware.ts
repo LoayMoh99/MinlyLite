@@ -4,12 +4,13 @@ import { getAccessTokenFromHeaders } from '@/utils/headers'
 import { jwtVerify } from '@/utils/jwt'
 import { userService } from '@/services'
 import { redis } from '@/dataSources'
+import { StatusCodes } from 'http-status-codes'
 
 export const authMiddleware = async (
   req: Request,
-  _: Response,
+  res: Response,
   next: NextFunction
-): Promise<void> => {
+) => {
   try {
     Object.assign(req, { context: {} })
 
@@ -22,7 +23,10 @@ export const authMiddleware = async (
     const isAccessTokenExpired = await redis.client.get(
       `expiredToken:${accessToken}`
     )
-    if (isAccessTokenExpired) return next()
+    if (isAccessTokenExpired) return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: 'Access token has expired!',
+      status: StatusCodes.UNAUTHORIZED
+    })
 
     const user = await userService.getById(id)
     if (!user) return next()

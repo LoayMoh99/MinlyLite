@@ -19,35 +19,35 @@ const Home: React.FC = () => {
     searchMedias(search);
   }, [search]);
 
-  const searchMedias = async (title: string = "") => {
-    setHasMore(true);
-    if (title.length > 0 && loading) { // for first time
+  const searchMedias = async (searchText: string = '') => {
+    let params = `?pageNo=${page}`;
+    let currMedias = medias;
+    if (searchText.length > 0) { // for first time
       setMedias([]);
       setPage(1);
+      params = `?pageNo=${1}`;
+      currMedias = [];
     }
-    const params = `?pageNo=${page}` + (title.length > 0 ? `&search=${title}` : '');
+    setHasMore(true);
+    params += (searchText.length > 0 ? `&search=${searchText}` : '');
     console.log("searching medias with params: ", params);
-    await getPublicMedias(params).then((response) => {
-      const responseMedias: any[] = response.data.data.data;
-      setLoading(false);
-      // check for hasMore condition 
-      if (responseMedias.length === 0) {
-        setHasMore(false);
-        return;
-      }
-      console.log(responseMedias);
+    const response = await getPublicMedias(params);
 
-      setMedias(medias.concat(
-        ...responseMedias
-      ));
-      setPage(page + 1);
+    const responseMedias: any[] = response.data.data.data;
+    setLoading(false);
+    // check for hasMore condition 
+    if (responseMedias.length === 0) {
+      setHasMore(false);
+      return;
+    }
+    console.log(responseMedias);
 
-    })
+    setMedias([...currMedias, ...responseMedias]);
+    setPage(page + 1);
   };
-
   return (
     <div>
-      <Search onSearch={setSearch} />
+      <Search onSearch={searchMedias} />
       {
         loading ? <div className="empty">
           <h2>Loading...</h2>

@@ -18,7 +18,7 @@ const Login: React.FC<Props> = () => {
       // verify it 
       verifyCredentials(verificationtoken);
     }
-  }, []);
+  });
 
   const verifyCredentials = async (token: string) => {
     setMessage("");
@@ -66,7 +66,7 @@ const Login: React.FC<Props> = () => {
 
     setMessage("");
     setLoading(true);
-    
+
     login(email, password).then(
       () => {
         navigate("/profile");

@@ -11,7 +11,7 @@ export function validateSignature(signature: string | string[]) {
   }
 
   // using our OUR_API_KEY from .env file check if the signature is valid base64 encoded
-  return sign === createHmac('sha256', process.env.OUR_API_KEY ?? 'XXX').digest('base64');
+  return sign === process.env.OUR_API_KEY;
 
 
 }

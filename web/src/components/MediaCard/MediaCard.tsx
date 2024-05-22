@@ -13,7 +13,7 @@ const MediaCard = (media: IMedia) => {
     const [likesCount, setLikeCount] = useState(media.likesCount ?? 0);
     const [dislikesCount, setDislikeCount] = useState(media.dislikesCount ?? 0);
 
-    const handleLikeDislike = async (value: number) => {
+    const handleLikeDislike = async (value: string) => {
         // check if user is logged in
         const token = localStorage.getItem('usertoken');
         if (!token) {
@@ -21,7 +21,7 @@ const MediaCard = (media: IMedia) => {
             return;
         }
 
-        if (value === 1) {
+        if (value === "like") {
             if (like === 1) {
                 setLike(0);
                 setLikeCount(likesCount - 1);
@@ -39,12 +39,14 @@ const MediaCard = (media: IMedia) => {
                 setLike(1);
                 setDislikeCount(dislikesCount - 1);
             }
+            // if like = 0
             setLike(1);
             setLikeCount(likesCount + 1);
             await takeActionOnMedia(media._id, 'like').then((response: any) => {
-                console.log(response);
                 if (response.status !== 200) {
                     toast.error(response.data.message);
+                    setLike(0);
+                    setLikeCount(likesCount - 1);
                 }
             });
         } else {
@@ -56,21 +58,23 @@ const MediaCard = (media: IMedia) => {
                     console.log(response);
                     if (response.status !== 200) {
                         toast.error(response.data.message);
+                        setLike(-1);
+                        setDislikeCount(dislikesCount + 1);
                     }
-                    setLike(-1);
-                    setDislikeCount(dislikesCount + 1);
                 });
                 return;
             } else if (like === 1) {
                 setLike(-1);
                 setLikeCount(likesCount - 1);
             }
+            // if like = 0
             setLike(-1);
             setDislikeCount(dislikesCount + 1);
             await takeActionOnMedia(media._id, 'dislike').then((response: any) => {
-                console.log(response);
                 if (response.status !== 200) {
                     toast.error(response.data.message);
+                    setLike(0);
+                    setDislikeCount(dislikesCount - 1);
                 }
             });
         }
@@ -104,8 +108,8 @@ const MediaCard = (media: IMedia) => {
                 <h4>{media.title}</h4>
 
                 <InteractiveLikeButtons likes={likesCount} dislikes={dislikesCount}
-                    onLike={() => handleLikeDislike(1)}
-                    onDislike={() => handleLikeDislike(-1)}
+                    onLike={() => handleLikeDislike("like")}
+                    onDislike={() => handleLikeDislike("dislike")}
                     likeCase={like} />
 
             </div>

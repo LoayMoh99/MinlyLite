@@ -27,9 +27,9 @@ app.use(
   express.json({ limit: '10mb' }),
   express.urlencoded({ limit: '10mb', extended: true }),
   corsMiddleware,
-  signatureMiddleware,
   i18nextHttpMiddleware.handle(i18next),
   authMiddleware,
+  signatureMiddleware,
   router,
   notFoundMiddleware
 )

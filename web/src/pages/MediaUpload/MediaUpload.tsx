@@ -39,7 +39,7 @@ function MediaUpload() {
 
     }
 
-    const handleClick = (formValue: { title: string }) => {
+    const handleUpload = (formValue: { title: string }) => {
         // check if user is logged in
         const token = localStorage.getItem('usertoken');
         if (!token) {
@@ -109,7 +109,7 @@ function MediaUpload() {
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={handleClick}
+                onSubmit={handleUpload}
             >
                 <Form>
                     <div className="form-group">
