@@ -1,10 +1,11 @@
 import axios from "axios";
-import authHeader from "./auth.service";
+import authHeader from "../utils/auth-headers";
+import signHeader from "../utils/sign-headers";
 
 const API_URL = process.env.API_URL || "http://localhost:8000/";
 
 export const getPublicMedias = (params: string = "") => {
-  return axios.get(API_URL + "medias" + params, { headers: authHeader() });
+  return axios.get(API_URL + "medias" + params, { headers: { ...authHeader(), ...signHeader() } });
 };
 
 export const createMedia = (url: string, title: string, type: string) => {
@@ -14,7 +15,7 @@ export const createMedia = (url: string, title: string, type: string) => {
       title: title,
       mediaUrl: url,
       type: type,
-    }, { headers: authHeader() });
+    }, { headers: { ...authHeader(), ...signHeader() } });
 
     return res;
 
@@ -28,6 +29,6 @@ export const takeActionOnMedia = (mediaId: string, action: 'like' | 'dislike' | 
   return axios.post(API_URL + "media/like-unlike", {
     mediaId,
     action,
-  }, { headers: authHeader() });
+  }, { headers: { ...authHeader(), ...signHeader() } });
 
 }

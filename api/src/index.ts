@@ -7,7 +7,8 @@ import { mongoose, redis } from '@/dataSources'
 import {
   corsMiddleware,
   authMiddleware,
-  notFoundMiddleware
+  notFoundMiddleware,
+  signatureMiddleware
 } from '@/middlewares'
 import { router } from '@/routes'
 import { i18next, i18nextHttpMiddleware } from '@/i18n'
@@ -26,6 +27,7 @@ app.use(
   express.json({ limit: '10mb' }),
   express.urlencoded({ limit: '10mb', extended: true }),
   corsMiddleware,
+  signatureMiddleware,
   i18nextHttpMiddleware.handle(i18next),
   authMiddleware,
   router,

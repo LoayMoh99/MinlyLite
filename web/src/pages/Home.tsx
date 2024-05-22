@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Search from "./Search/Search";
-import MediaCard from "./MediaCard/MediaCard";
+import Search from "../components/Search/Search";
+import MediaCard from "../components/MediaCard/MediaCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import IMedia from "../types/media.type";
 import { getPublicMedias } from "../services/media.service";

@@ -7,13 +7,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as AuthService from "./services/auth.service";
 import IUser from './types/user.type';
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
 import EventBus from "./common/EventBus";
-import MediaUpload from "./components/MediaUpload/MediaUpload";
+import MediaUpload from "./pages/MediaUpload/MediaUpload";
 import { Toaster } from "react-hot-toast";
 
 const App: React.FC = () => {

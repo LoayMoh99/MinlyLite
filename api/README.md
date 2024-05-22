@@ -1,8 +1,4 @@
-# [express-mongodb-rest-api-typescript-boilerplate](https://github.com/watscho/express-mongodb-rest-api-boilerplate)
-
-[![](https://img.shields.io/badge/author-@watscho-blue.svg)](https://www.linkedin.com/in/watscho)
-[![](https://api.codacy.com/project/badge/Grade/f4ea86b0cf474e928d34f3723aed349e)](https://app.codacy.com/gh/watscho/express-mongodb-rest-api-boilerplate)
-[![GitHub license](https://img.shields.io/github/license/watscho/express-mongodb-rest-api-boilerplate)](https://github.com/watscho/express-mongodb-rest-api-boilerplate/blob/master/LICENSE)
+# Minlylite API
 
 ## Authentication from scratch `TypeScript`
 
@@ -80,10 +76,10 @@ You can install Node modules using either [npm](https://www.npmjs.com/) or [Yarn
 yarn install # or npm install
 ```
 
-COPY .env.example to .env
+COPY env.example to .env
 
 ```bash
-cp .env.example .env
+cp env.example .env
 ```
 
 ### API Start
@@ -110,6 +106,7 @@ yarn prettier:write # or npm run prettier:write - with prefix --fix
 
 ## API Endpoints
 
+Auth APIS:
 - POST: <http://localhost:8000/auth/sign-in> Sign In
 - POST: <http://localhost:8000/auth/sign-up> Sign Up
 - GET: <http://localhost:8000/auth/sign-out> Sign Out
@@ -121,8 +118,16 @@ yarn prettier:write # or npm run prettier:write - with prefix --fix
 - POST: <http://localhost:8000/user/update> Update User
 - POST: <http://localhost:8000/user/update/email> Update Email
 - POST: <http://localhost:8000/user/update/password> Update Password
-- POST: <http://localhost:8000/user/update/avatar> Update Avatar
+
 - POST: <http://localhost:8000/user/delete> Delete Profile
+
+Media APIs
+- GET: <http://localhost:8000/medias> Media Listing (Query params: search: title text search, pageNo: page num, pageSise: size of page, sortBy: 'new' | 'popular' ..)
+- POST: <http://localhost:8000/media> Create new Media
+- POST: <http://localhost:8000/media/like-unlike> Like/Dislike Media
+- POST: <http://localhost:8000/media/image-upload> Upload image manually to our server and return the URL (Not used - can be used in specific cases if we need special handling in image uplaod - BETTER - using Storage provide)
+- GET: <http://localhost:8000/media/seed> Seed DB with some Dummy Media (in Dev only)
+
 
 ### Mailcatcher
 
@@ -136,111 +141,3 @@ If you're looking for an easy-to-use tool to test your email SMTP functionality,
 - In the search bar, type "Prettier" and select the first result that appears.
 - Click the "Install" button to install Prettier.
 - Repeat step 4 and 5 to install ESLint.
-
-### API Structure
-
-```bash
-.
-├── src
-│  ├── @types
-│  │  └── global.d.ts
-│  ├── constants
-│  │  └── index.ts
-│  ├── contracts
-│  │  ├── auth.ts
-│  │  ├── jwt.ts
-│  │  ├── request.ts
-│  │  └── user.ts
-│  ├── controllers
-│  │  ├── authController.ts
-│  │  ├── index.ts
-│  │  └── userController.ts
-│  ├── dataSources
-│  │  ├── index.ts
-│  │  ├── mongoose.ts
-│  │  └── redis.ts
-│  ├── guards
-│  │  ├── authGuard.ts
-│  │  └── index.ts
-│  ├── i18n
-│  │  ├── index.ts
-│  │  └── translations
-│  │     ├── en.json
-│  │     └── ka.json
-│  ├── index.ts
-│  ├── infrastructure
-│  │  ├── logger.ts
-│  ├── mailer
-│  │  ├── index.ts
-│  │  ├── mailer.ts
-│  │  └── userMail.ts
-│  ├── middlewares
-│  │  ├── authMiddleware.ts
-│  │  ├── corsMiddleware.ts
-│  │  ├── index.ts
-│  │  ├── notFoundMiddleware.ts
-│  │  └── uploadSingleImageValidation.ts
-│  ├── models
-│  │  ├── index.ts
-│  │  ├── resetPassword.ts
-│  │  ├── user.ts
-│  │  └── verification.ts
-│  ├── routes
-│  │  ├── auth.ts
-│  │  ├── index.ts
-│  │  └── users.ts
-│  ├── services
-│  │  ├── index.ts
-│  │  ├── resetPasswordService.ts
-│  │  ├── userService.ts
-│  │  └── verificationService.ts
-│  ├── storage
-│  │  └── public
-│  ├── templates
-│  │  ├── resetPassword
-│  │  │  └── html.ejs
-│  │  ├── signUp
-│  │  │  └── html.ejs
-│  │  ├── successfullyDeleted
-│  │  │  └── html.ejs
-│  │  ├── successfullyUpdatedEmail
-│  │  │  └── html.ejs
-│  │  ├── successfullyUpdatedPassword
-│  │  │  └── html.ejs
-│  │  ├── successfullyUpdatedProfile
-│  │  │  └── html.ejs
-│  │  ├── successfullyVerified
-│  │  │  └── html.ejs
-│  │  └── verification
-│  │     └── html.ejs
-│  ├── utils
-│  │  ├── cryptoString.ts
-│  │  ├── dates.ts
-│  │  ├── hash.ts
-│  │  ├── headers.ts
-│  │  ├── jwt.ts
-│  │  ├── maths.ts
-│  │  └── paths.ts
-│  └── validations
-│     ├── authValidation.ts
-│     ├── index.ts
-│     └── userValidation.ts
-├── .env
-├── .env.example
-├── .eslintrc
-├── .gitignore
-├── .nvmrc
-├── .prettierrc
-├── api-logs.log
-├── LICENSE
-├── package.json
-├── README.md
-├── tsconfig.json
-└── yarn.lock
-```
-
-**Note:** For any question [issues](https://github.com/watscho/express-mongodb-rest-api-boilerplate/issues)
-
-## License
-
-This project is an open-source with an [MIT License](https://github.com/watscho/express-mongodb-rest-api-boilerplate/blob/master/LICENSE)

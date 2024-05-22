@@ -40,17 +40,17 @@ services:
     #   - /app/node_modules
     depends_on:
       - api
-  # nginx:
-  #   build: ./nginx
-  #   restart: on-failure
-  #   container_name: nginx
-  #   ports:
-  #     - "80:80"
-  #   # volumes:
-  #   #   - ./nginx:/etc/nginx/conf.d
-  #   depends_on:
-  #     - api
-  #     - web
+  nginx:
+    build: ./nginx
+    restart: on-failure
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - api
+      - web
 networks:
   my-network:
     driver: bridge

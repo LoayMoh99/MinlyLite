@@ -1,5 +1,5 @@
 import './media-upload.css';
-import DropFileInput from '../DropFileInput/DropFileInput';
+import DropFileInput from '../../components/DropFileInput/DropFileInput';
 import { useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import { storage } from '../../config/firebase';
