@@ -13,7 +13,7 @@ You can check a more detailed demo using this [link](https://drive.google.com/fi
 - ### Frontend (Web)           
     -   React.js (Typescript)
     -   Firebase storage
-- ### Frontend (Mobile) - not yet finished :(
+- ### Frontend (Mobile) - *not yet finished :(*
     -   Flutter (Dart)
     -   Firebase storage
 - ### Backend
@@ -44,8 +44,8 @@ You can check a more detailed demo using this [link](https://drive.google.com/fi
 ```bash
 .
 ├── .github
-│  ├── workflows
-│  │  └── main.yml         # for CICD
+│  └── workflows
+│      └── main.yml         # for CICD
 │
 ├── api/src
 │  ├── constants
