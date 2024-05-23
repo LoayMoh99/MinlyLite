@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - "api/**"
-    #   - "web/**"
+    paths:
+      - "api/**"
+      - "web/**"
 #  pull_request:
 #    paths:
 #      - 'api/**'
